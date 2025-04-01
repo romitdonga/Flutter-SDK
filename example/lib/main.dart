@@ -16,8 +16,8 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with ImpressionDataListener, LevelPlayInitListener {
-
+class _MyAppState extends State<MyApp>
+    with ImpressionDataListener, LevelPlayInitListener {
   @override
   void initState() {
     // Wait until all listeners are set in the child widgets.
@@ -32,11 +32,11 @@ class _MyAppState extends State<MyApp> with ImpressionDataListener, LevelPlayIni
   // Must be called when the app is in the state UIApplicationStateActive
   Future<void> checkATT() async {
     final currentStatus =
-    await ATTrackingManager.getTrackingAuthorizationStatus();
+        await ATTrackingManager.getTrackingAuthorizationStatus();
     print('ATTStatus: $currentStatus');
     if (currentStatus == ATTStatus.NotDetermined) {
       final returnedStatus =
-      await ATTrackingManager.requestTrackingAuthorization();
+          await ATTrackingManager.requestTrackingAuthorization();
       print('ATTStatus returned: $returnedStatus');
     }
     return;
@@ -83,10 +83,10 @@ class _MyAppState extends State<MyApp> with ImpressionDataListener, LevelPlayIni
     final appKey = Platform.isAndroid
         ? "1dc3db545"
         : Platform.isIOS
-        ? "1dc3deecd"
-        : throw Exception("Unsupported Platform");
+            ? "1dc3deecd"
+            : throw Exception("Unsupported Platform");
     try {
-      IronSource.setFlutterVersion('3.16.9');
+      IronSource.setFlutterVersion('3.24.0');
       IronSource.addImpressionDataListener(this);
       await enableDebug();
       await IronSource.shouldTrackNetworkState(true);
@@ -111,11 +111,16 @@ class _MyAppState extends State<MyApp> with ImpressionDataListener, LevelPlayIni
 
       // Finally, initialize
       // LevelPlay Init
-      List<AdFormat> legacyAdFormats = [AdFormat.BANNER, AdFormat.REWARDED, AdFormat.INTERSTITIAL, AdFormat.NATIVE_AD];
+      List<AdFormat> legacyAdFormats = [
+        AdFormat.BANNER,
+        AdFormat.REWARDED,
+        AdFormat.INTERSTITIAL,
+        AdFormat.NATIVE_AD
+      ];
       final initRequest = LevelPlayInitRequest.builder(appKey)
-        .withLegacyAdFormats(legacyAdFormats)
-        .withUserId(APP_USER_ID)
-        .build();
+          .withLegacyAdFormats(legacyAdFormats)
+          .withUserId(APP_USER_ID)
+          .build();
       await LevelPlay.init(initRequest: initRequest, initListener: this);
     } on PlatformException catch (e) {
       print(e);
@@ -166,7 +171,8 @@ class _MyAppState extends State<MyApp> with ImpressionDataListener, LevelPlayIni
 
   @override
   void onInitSuccess(LevelPlayConfiguration configuration) {
-    print('onInitSuccess isAdQualityEnabled=${configuration.isAdQualityEnabled}');
+    print(
+        'onInitSuccess isAdQualityEnabled=${configuration.isAdQualityEnabled}');
   }
 }
 
@@ -179,8 +185,11 @@ class LevelPlayRewardedVideoSection extends StatefulWidget {
       _LevelPlayRewardedVideoSectionState();
 }
 
-class _LevelPlayRewardedVideoSectionState extends State<LevelPlayRewardedVideoSection> with LevelPlayRewardedAdListener {
-  final LevelPlayRewardedAd _rewardedAd = LevelPlayRewardedAd(adUnitId: Platform.isAndroid ? 'ugymkux8j6lfs2u4' : '9f4ukec62lsnsyhp');
+class _LevelPlayRewardedVideoSectionState
+    extends State<LevelPlayRewardedVideoSection>
+    with LevelPlayRewardedAdListener {
+  final LevelPlayRewardedAd _rewardedAd = LevelPlayRewardedAd(
+      adUnitId: Platform.isAndroid ? 'ugymkux8j6lfs2u4' : '9f4ukec62lsnsyhp');
 
   @override
   void initState() {
@@ -219,7 +228,8 @@ class _LevelPlayRewardedVideoSectionState extends State<LevelPlayRewardedVideoSe
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text("Rewarded Ad", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      const Text("Rewarded Ad",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       HorizontalButtons([
         ButtonInfo("Load Ad", _loadAd),
         ButtonInfo("Show Ad", _showAd),
@@ -274,11 +284,15 @@ class LevelPlayInterstitialAdSection extends StatefulWidget {
   const LevelPlayInterstitialAdSection({Key? key}) : super(key: key);
 
   @override
-  _LevelPlayInterstitialAdSectionState createState() => _LevelPlayInterstitialAdSectionState();
+  _LevelPlayInterstitialAdSectionState createState() =>
+      _LevelPlayInterstitialAdSectionState();
 }
 
-class _LevelPlayInterstitialAdSectionState extends State<LevelPlayInterstitialAdSection> with LevelPlayInterstitialAdListener {
-  final LevelPlayInterstitialAd _interstitialAd = LevelPlayInterstitialAd(adUnitId: Platform.isAndroid ? '71tj8zbmfozim5nd' : 'v3fn8t0yhk0awqsm');
+class _LevelPlayInterstitialAdSectionState
+    extends State<LevelPlayInterstitialAdSection>
+    with LevelPlayInterstitialAdListener {
+  final LevelPlayInterstitialAd _interstitialAd = LevelPlayInterstitialAd(
+      adUnitId: Platform.isAndroid ? '71tj8zbmfozim5nd' : 'v3fn8t0yhk0awqsm');
 
   @override
   void initState() {
@@ -299,7 +313,8 @@ class _LevelPlayInterstitialAdSectionState extends State<LevelPlayInterstitialAd
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text("Interstitial Ad", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      const Text("Interstitial Ad",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       HorizontalButtons([
         ButtonInfo("Load Ad", _loadAd),
         ButtonInfo("Show Ad", _showAd),
@@ -319,7 +334,8 @@ class _LevelPlayInterstitialAdSectionState extends State<LevelPlayInterstitialAd
 
   @override
   void onAdDisplayFailed(LevelPlayAdError error, LevelPlayAdInfo adInfo) {
-    print("Interstitial Ad - onAdDisplayFailed: adInfo - $adInfo, error - $error");
+    print(
+        "Interstitial Ad - onAdDisplayFailed: adInfo - $adInfo, error - $error");
   }
 
   @override
@@ -348,13 +364,18 @@ class LevelPlayBannerAdViewSection extends StatefulWidget {
   const LevelPlayBannerAdViewSection({Key? key}) : super(key: key);
 
   @override
-  _LevelPlayBannerAdViewSectionState createState() => _LevelPlayBannerAdViewSectionState();
+  _LevelPlayBannerAdViewSectionState createState() =>
+      _LevelPlayBannerAdViewSectionState();
 }
 
-class _LevelPlayBannerAdViewSectionState extends State<LevelPlayBannerAdViewSection> with LevelPlayBannerAdViewListener {
-  final GlobalKey<LevelPlayBannerAdViewState> _bannerKey = GlobalKey<LevelPlayBannerAdViewState>();
+class _LevelPlayBannerAdViewSectionState
+    extends State<LevelPlayBannerAdViewSection>
+    with LevelPlayBannerAdViewListener {
+  final GlobalKey<LevelPlayBannerAdViewState> _bannerKey =
+      GlobalKey<LevelPlayBannerAdViewState>();
   final _adSize = LevelPlayAdSize.BANNER;
-  final _adUnitId = Platform.isAndroid ? 'iq2gxli4u8n10jrp' : 'pfhu8mrg1arqwlo8';
+  final _adUnitId =
+      Platform.isAndroid ? 'iq2gxli4u8n10jrp' : 'pfhu8mrg1arqwlo8';
   final _placementName = '';
 
   void _loadAd() {
@@ -376,14 +397,15 @@ class _LevelPlayBannerAdViewSectionState extends State<LevelPlayBannerAdViewSect
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text("Banner Ad View", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      const Text("Banner Ad View",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       HorizontalButtons([
         ButtonInfo("Load Ad", _loadAd),
         ButtonInfo("Destroy Ad", _destroyAd)
       ]),
       HorizontalButtons([
-        ButtonInfo("Pause Auto Refresh", _pauseAutoRefresh ),
-        ButtonInfo("Resume Auto Refresh", _resumeAutoRefresh ),
+        ButtonInfo("Pause Auto Refresh", _pauseAutoRefresh),
+        ButtonInfo("Resume Auto Refresh", _resumeAutoRefresh),
       ]),
       SizedBox(
         width: _adSize.width.toDouble(),
@@ -411,7 +433,8 @@ class _LevelPlayBannerAdViewSectionState extends State<LevelPlayBannerAdViewSect
 
   @override
   void onAdDisplayFailed(LevelPlayAdInfo adInfo, LevelPlayAdError error) {
-    print("Banner Ad View - onAdDisplayFailed: adInfo - $adInfo, error - $error");
+    print(
+        "Banner Ad View - onAdDisplayFailed: adInfo - $adInfo, error - $error");
   }
 
   @override
@@ -442,20 +465,20 @@ class _LevelPlayBannerAdViewSectionState extends State<LevelPlayBannerAdViewSect
 
 /// LevelPlay Native Ad View Section -------------------------------------------///
 class LevelPlayNativeAdViewSection extends StatefulWidget {
-
   const LevelPlayNativeAdViewSection({Key? key}) : super(key: key);
 
   @override
-  _LevelPlayNativeAdsSection createState() =>
-      _LevelPlayNativeAdsSection();
+  _LevelPlayNativeAdsSection createState() => _LevelPlayNativeAdsSection();
 }
 
-class _LevelPlayNativeAdsSection extends State<LevelPlayNativeAdViewSection> with LevelPlayNativeAdListener {
+class _LevelPlayNativeAdsSection extends State<LevelPlayNativeAdViewSection>
+    with LevelPlayNativeAdListener {
   late LevelPlayNativeAd _nativeAd;
   final double _width = 350;
   final double _height = 300;
   final String _placementName = '';
-  final LevelPlayTemplateType _templateType = LevelPlayTemplateType.MEDIUM; // Built-in native ad template(not required when implementing custom template)
+  final LevelPlayTemplateType _templateType = LevelPlayTemplateType
+      .MEDIUM; // Built-in native ad template(not required when implementing custom template)
 
   @override
   void initState() {
@@ -476,19 +499,21 @@ class _LevelPlayNativeAdsSection extends State<LevelPlayNativeAdViewSection> wit
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      const Text("Native Ad View", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      HorizontalButtons([
-        ButtonInfo("Load Ad", _loadAd),
-        ButtonInfo("Destroy Ad", _destroyAd),
-      ]),
-      LevelPlayNativeAdView(
+    return Column(
+      children: [
+        const Text("Native Ad View",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        HorizontalButtons([
+          ButtonInfo("Load Ad", _loadAd),
+          ButtonInfo("Destroy Ad", _destroyAd),
+        ]),
+        LevelPlayNativeAdView(
           height: _height,
           width: _width,
           nativeAd: _nativeAd,
           templateType: _templateType,
-      )
-    ],
+        )
+      ],
     );
   }
 
@@ -528,7 +553,8 @@ class IOSSection extends StatefulWidget {
   _IOSSectionState createState() => _IOSSectionState();
 }
 
-class _IOSSectionState extends State<IOSSection> with IronSourceConsentViewListener {
+class _IOSSectionState extends State<IOSSection>
+    with IronSourceConsentViewListener {
   @override
   void initState() {
     super.initState();
@@ -553,7 +579,8 @@ class _IOSSectionState extends State<IOSSection> with IronSourceConsentViewListe
         });
   }
 
-  Future<void> _loadConsentView() async =>await IronSource.loadConsentViewWithType('pre');
+  Future<void> _loadConsentView() async =>
+      await IronSource.loadConsentViewWithType('pre');
 
   Future<void> _getConversionValue(BuildContext context) async {
     final cv = await IronSource.getConversionValue();
@@ -563,9 +590,13 @@ class _IOSSectionState extends State<IOSSection> with IronSourceConsentViewListe
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const Text("iOS 14", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-      HorizontalButtons([ButtonInfo("Get Conversion Value", () => _getConversionValue(context))]),
-      HorizontalButtons([ButtonInfo("Load Consent View", () => _loadConsentView)])
+      const Text("iOS 14",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      HorizontalButtons([
+        ButtonInfo("Get Conversion Value", () => _getConversionValue(context))
+      ]),
+      HorizontalButtons(
+          [ButtonInfo("Load Consent View", () => _loadConsentView)])
     ]);
   }
 
@@ -612,18 +643,19 @@ class HorizontalButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final smallBtnStyle = ElevatedButton.styleFrom(minimumSize: const Size(150, 45));
+    final smallBtnStyle =
+        ElevatedButton.styleFrom(minimumSize: const Size(150, 45));
     return Row(
         children: buttons
             .map((btn) => Expanded(
-          child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: ElevatedButton(
-                onPressed: btn.onPressed,
-                child: Text(btn.title),
-                style: smallBtnStyle,
-              )),
-        ))
+                  child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ElevatedButton(
+                        onPressed: btn.onPressed,
+                        child: Text(btn.title),
+                        style: smallBtnStyle,
+                      )),
+                ))
             .toList());
   }
 }
